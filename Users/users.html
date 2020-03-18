@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js' type='text/javascript'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Zabooers portal</title>
+  </head>
+  <body>
+      <!-- navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-zaboo-custom ">
+        <button class="navbar-toggler"id="menu-toggle" type="button">
+            <span ><i class="material-icons icon">arrow_forward</i></span>
+        </button>
+        
+        <a class="navbar-brand ml-3" href="#">
+            <img class="logo"src="./images/zaboo-logo_2.svg" width="120" height="40" alt="">
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="user-name">Usuario </span> <i class="material-icons icon">account_circle</i>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item logout" href="#"><i class="material-icons icon">exit_to_app</i>Logout</a>
+                <a class="dropdown-item settings" href="#"><i class="material-icons icon ">settings</i>Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item assistance" href="#" data-toggle="modal" data-target="#assistanceModal"><i class="material-icons icon">email</i>Inmediate assistance</a>
+              </div>
+            </li>
+    
+          </ul>
+
+        </div>
+      </nav>
+      <!-- Wrapper  -->
+      <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class=" bg-zaboo-custom1 border-right fixed-left" id="sidebar-wrapper">
+          <div class="sidebar-heading"> 
+            <header class="avatar">
+            <div class="image-avatar mt-5"></div>
+            <!-- <img src="https://api.adorable.io/avatars/187/asis@adorable.io.png" /> -->
+            <h2 class="font-weight-light h4 mt-3 user-name">Usuario</h2>
+          </header></div>
+          <div class="list-group list-group-flush ">
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white my_products"><i class="material-icons icon">dashboard</i> My Products</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white real_time"><i class="material-icons icon">timelapse</i> Real Time</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white"><i class="material-icons icon">chat</i>  Chat Requests</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white"><i class="material-icons icon">insert_chart</i>  Stadistics</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white"><i class="material-icons icon">photo</i>  Images</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent text-white settings"><i class="material-icons icon">settings</i>  Settings</a>
+       
+          </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- #Container-->
+        <div class="container-fluid mt-5">
+          <div class="row user-items">
+
+          </div>
+        </div>
+        </div>
+        <!-- /#Container-->
+      </div>
+      <!-- /#wrapper -->
+            <!-- Modal assitance -->
+            <div class="modal fade" id="assistanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                 <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Send an Email with your issues </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Your are important to us
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Send changes</button>
+                </div>
+              </div>
+                </div>
+            </div>
+            <!-- /Modal assitance-->
+            <!--Modal producto-->
+            <div class="modal" tabindex="-1" role="dialog" id="modal-producto">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title modal-producto-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--/ Modal Producto-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+    <script>
+        $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#wrapper").toggleClass("toggled");
+        
+        });
+        $(window).resize(function(){
+            var width = $(window).width();
+            if(width > 960){
+            $('#wrapper').removeClass('toggled');
+            }
+            })
+        .resize();//trigger the resize event on page load.
+
+
+      </script>
+    <script src="js/User.js"></script>
+    <script src="js/gravatar.js"></script>
+  </body>
+</html>

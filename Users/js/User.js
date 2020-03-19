@@ -191,6 +191,7 @@ $(".images").click(function(){
 
     $(".user-items").empty()
     
+    
     var imagesReference = storage.ref('zaboo122/')
     var storageRef = firebase.storage().ref();
     imagesReference.listAll()
@@ -211,7 +212,22 @@ $(".images").click(function(){
                 xhr.send();
                 
                 // Or inserted into an <img> element:
-                $(".user-items").append(`<img id="${pathReference}" src="${url}" >`)
+                $(".user-items").append(`
+                
+                <div class="col-sm-12  col-lg-3 card shadow ml-3 mr-3 mt-3 mb-3 id="${pathReference}" style="width: 25rem; background:linear-gradient(15deg,#EFEDEF 0%, #FFFFFF 100%);">
+                <div class="card-image mt-3 mb-0" style="width: 15rem;">
+                    <img class="card-img-top mb-0" src="${url}" alt="Card image cap">
+                </div>
+                <div class="card-body" >
+                    <h5 class="card-title text-capitalize" style="text-align: center; "> Foto </h5>
+                    <hr class="style3 mt-0 mb-0">
+                    <br>
+                    <p class="card-text text-left  text-muted"><i class="material-icons icon" style="color: #DB5B14;">group_work</i> <small> TIPO : </small> Zaboo Polly</p>
+                </div>
+                
+                
+                
+                `)
               }).catch(function(error) {
                 // Handle any errors
                 console.log(error)

@@ -11,9 +11,14 @@ const firebaseConfig = {
     measurementId: "G-ZMPBZ14S63"
 };
 
+//gsutil cors set cors.json gs://bloggeekplatzi1.appspot.com
+//storage.googleapis.com/bloggeekplatzi1.appspot.com
+
+
+
 firebase.initializeApp(firebaseConfig);
 db=firebase.firestore()
-
+var storage = firebase.storage();
 // Actualizar Nombre de usuario
 
 function getUserData(){
@@ -31,7 +36,7 @@ function getUserData(){
 }
 getUserData()
 .then(userData=>{
-    console.log(userData)
+    
     $(".user-name").text(userData.name)
     VerificarAsociación(userData)
 })
@@ -64,9 +69,10 @@ function VerificarAsociación(userData){
                 .then(function(querySnapshot){
                     if(querySnapshot.empty){
                         console.log('no encontre en usuarios zaboo esto')
-                        $(".container-fluid").append(
+                        $(".user-items").empty()
+                        $(".user-items").append(
                             `
-                        <div class="alert alert-success mt-4 " role="alert">
+                        <div class="alert alert-success mt-5 col-12 mr-3 ml-3 " role="alert">
                         <h4 class="alert-heading">Well done!</h4>
                         <p>If you want to see your Zaboo products and the all the features please send the following message to Zaboo <i class="material-icons icon">chat</i> "Asociar ${nombre_asociar}"</p>
                         <hr>
@@ -86,8 +92,9 @@ function VerificarAsociación(userData){
                             console.log(chat_id)
 
                             if(!dispositivos){
-                                $(".container-fluid").append(
-                                `<div class="alert alert-warning mt-5" role="alert">
+                                $(".user-items").empty()
+                                $(".user-items").append(
+                                `<div class="alert alert-warning mt-5 col-12 mr-3 ml-3" role="alert">
                                 <h4 class="alert-heading">OH!</h4>
                                 You don´t have products asosiate with your chat account yet, please verify your chat is working or buy our products in the website www.zaboo.co
                                 </div>`)
@@ -95,6 +102,7 @@ function VerificarAsociación(userData){
                             }
 
                         else{
+                            $(".user-items").empty()
                             zaboo_products_template(dispositivos,dispositivos_legibles,chat_id);
                         }
 
@@ -159,22 +167,63 @@ $(".real_time").click(function(){
 $(".settings").click(function(){
     console.log("settings")
     $(".user-items").empty()
-    $(".user-items").append(    
-    
+    $(".user-items").append( 
     `
     <div class ="mt-5  ml-3"style ="width:100%;"> <h3>Change Name <h3/> </div>
-    <div class="input-group mt-2 mb-3 ml-3" style ="width:80%;">
-    <input type="text" class="form-control" placeholder="New Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <div class="input-group mt-2 mb-3 ml-3" style ="width:60%;">
+    <input type="text" class="form-control" id="changeName" placeholder="New Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
     <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button">Save </button>
+      <button class="btn btn-outline-secondary" type="button"  onclick="changeName()" >Save </button>
     </div>
     </div>`
+
   )
 
 });
 
 $(".assistance").click(function(){
     console.log("asistance")
+
+});
+
+$(".images").click(function(){
+    // Create a reference under which you want to list
+
+    $(".user-items").empty()
+    
+    var imagesReference = storage.ref('zaboo122/')
+    var storageRef = firebase.storage().ref();
+    imagesReference.listAll()
+    .then(function(image_item){
+        image_item.items.forEach(function(item){
+            var pathReference = storageRef.child(item.fullPath)  
+            console.log(pathReference)
+            //in
+            storageRef.child(item.fullPath).getDownloadURL().then(function(url) {
+                // `url` is the download URL for 'images/stars.jpg'
+                // This can be downloaded directly:
+                var xhr = new XMLHttpRequest();
+                xhr.responseType = 'blob';
+                xhr.onload = function(event) {
+                  var blob = xhr.response;
+                };
+                xhr.open('GET', url);
+                xhr.send();
+                
+                // Or inserted into an <img> element:
+                $(".user-items").append(`<img id="${pathReference}" src="${url}" >`)
+              }).catch(function(error) {
+                // Handle any errors
+                console.log(error)
+              });
+            //out
+        })
+    },function(error){
+        console.error(error)
+    })
+    
+
+    
 
 });
 
@@ -298,3 +347,37 @@ function user_name_update()
   })
 
 }
+
+function changeName(){
+
+    var new_name = document.getElementById("changeName").value;
+    if(!new_name){
+        console.log("The name is empty")
+    }
+
+    else{
+        var user = firebase.auth().currentUser;
+        user.updateProfile({
+            displayName: new_name,
+        })
+        .then(function(){
+            var displayName = user.displayName;
+            getUserData()
+            .then(userData=>{
+            console.log(userData)
+            $(".user-name").text(userData.name)
+            
+        })
+        .catch(error=>{
+        console.error(error)
+
+        })
+
+        },function(error){
+            console.error(error)
+        })
+
+
+    }
+}
+

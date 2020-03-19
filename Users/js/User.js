@@ -118,7 +118,7 @@ function VerificarAsociación(userData){
 $(".logout").click(function(){
     console.log("Cerrar Sesión")
     firebase.auth().signOut()
-     window.location = '../login/login.html'; 
+     window.location = '../index.html'; 
 
 });
 
@@ -180,7 +180,7 @@ $(".assistance").click(function(){
 
 firebase.auth().onAuthStateChanged(user => {
     if(!user) {
-        window.location = '../login/login.html'; 
+        window.location = '../index.html'; 
     }
 });
 // template de los productos, consultar el array, recorrerlo e ir haciendo el append

@@ -75,7 +75,7 @@ consulta_usuarios.get()
                 console.log('Caso 3 ')
                 //window.location = '../personalDashboard.html'; //After successful login, user will be redirected to home.html
                 firebase.auth().signOut()
-                window.location = '../login/login.html'; //After successful login, user will be redirected to home.html
+                window.location = '../index.html'; //After successful login, user will be redirected to home.html
             }     
             else{
                 //Caso 2 es usuario y no es la primera vez que entra

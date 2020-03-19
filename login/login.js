@@ -147,7 +147,7 @@ firebase.auth().onAuthStateChanged(user => {
   if(user) {
     //window.location = 'personalDashboard.html'; //After successful login, user will be redirected to home.html
     console.log('Usuario permitido')
-	window.location = '../UvA/UvA.html'; //After successful login, user will be redirected to home.html
+	window.location = './UvA/UvA.html'; //After successful login, user will be redirected to home.html
   }
 });
 

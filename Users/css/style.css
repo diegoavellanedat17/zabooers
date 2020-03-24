@@ -56,6 +56,11 @@ body {
 hr.style3 {
 	border-top: 1px dashed #8c8b8b;
 }
+
+.division-style{
+  background-color: #fff;
+	border-top: 2px dashed #8c8b8b;
+}
   
   #sidebar-wrapper {
     min-height: 100vh;

@@ -21,6 +21,8 @@ db=firebase.firestore()
 var storage = firebase.storage();
 // Actualizar Nombre de usuario
 
+//Variables con la info del usuario
+
 function getUserData(){
     return new Promise((resolve,reject)=>{
         firebase.auth().onAuthStateChanged(user => {
@@ -67,7 +69,9 @@ function VerificarAsociación(userData){
                 var consulta_usuariosZaboo=db.collection('usuariosZaboo').where("asosiate_name","==",nombre_asociar)
                 consulta_usuariosZaboo.get()
                 .then(function(querySnapshot){
+                    
                     if(querySnapshot.empty){
+                        dispositivos=[]
                         console.log('no encontre en usuarios zaboo esto')
                         $(".user-items").empty()
                         $(".user-items").append(
@@ -83,9 +87,10 @@ function VerificarAsociación(userData){
                     else{
                         querySnapshot.forEach(function(user_zaboo){
                             const chat_id=user_zaboo.data().chat_id
-                            const dispositivos=user_zaboo.data().dispositivos
-                            const dispositivos_legibles=user_zaboo.data().dispositivos_legibles
-                            const tokens= user_zaboo.data().tokens
+                            // se declaran asi para que sean variables globales
+                            dispositivos=user_zaboo.data().dispositivos
+                            dispositivos_legibles=user_zaboo.data().dispositivos_legibles
+                            tokens= user_zaboo.data().tokens
                             console.log(dispositivos)
                             console.log(dispositivos_legibles)
                             console.log(tokens)
@@ -104,6 +109,7 @@ function VerificarAsociación(userData){
                         else{
                             $(".user-items").empty()
                             zaboo_products_template(dispositivos,dispositivos_legibles,chat_id);
+                            return dispositivos
                         }
 
                         })
@@ -187,18 +193,38 @@ $(".assistance").click(function(){
 });
 
 $(".images").click(function(){
-    // Create a reference under which you want to list
+    // Verifcar que dispositivos za tiene el usuario 
 
-    $(".user-items").empty()
-    
-    
-    var imagesReference = storage.ref('zaboo122/')
-    var storageRef = firebase.storage().ref();
-    imagesReference.listAll()
-    .then(function(image_item){
-        image_item.items.forEach(function(item){
+    var len = dispositivos.length;
+    if(len === 0 ){
+        $(".user-items").empty()
+        $(".user-items").append(
+        `<div class="alert alert-warning mt-5 col-12 mr-3 ml-3" role="alert">
+        <h4 class="alert-heading">OH!</h4>
+        You don´t have products asosiate with your chat account yet, please verify your chat is working or buy our products in the website www.zaboo.co
+        </div>`)
+   
+    }
+
+    else{
+        
+        $(".user-items").empty()
+        $(".user-items").append(`<div class="col-12 division-style mt-5"><h3>My Zaboo Polly Images</h3></div>`)
+    for (var i = 0; i < len; i++){
+              
+        if(dispositivos[i].substring(0,2)==='za'){
+
+            var folderPath=dispositivos[i]+'/'
+            console.log(folderPath)
+            console.log(dispositivos_legibles[i])
+      
+            var imagesReference = storage.ref(folderPath)
+            var storageRef = firebase.storage().ref();
+            imagesReference.listAll()
+            .then(function(image_item){
+            image_item.items.forEach(function(item){
             var pathReference = storageRef.child(item.fullPath)  
-            console.log(pathReference)
+            console.log(item.fullPath)
             //in
             storageRef.child(item.fullPath).getDownloadURL().then(function(url) {
                 // `url` is the download URL for 'images/stars.jpg'
@@ -211,6 +237,9 @@ $(".images").click(function(){
                 xhr.open('GET', url);
                 xhr.send();
                 
+                //Encontrar la locacion 
+                var currentDevice=item.fullPath.substring(0,8)
+                const index = dispositivos.findIndex(device => device === currentDevice);
                 // Or inserted into an <img> element:
                 $(".user-items").append(`
                 
@@ -222,9 +251,8 @@ $(".images").click(function(){
                     <h5 class="card-title text-capitalize" style="text-align: center; "> Foto </h5>
                     <hr class="style3 mt-0 mb-0">
                     <br>
-                    <p class="card-text text-left  text-muted"><i class="material-icons icon" style="color: #DB5B14;">group_work</i> <small> TIPO : </small> Zaboo Polly</p>
+                    <p class="card-text text-left  text-muted"><i class="material-icons icon" style="color: #DB5B14;">place</i> <small> LOCATION : </small> ${dispositivos_legibles[index]}</p>
                 </div>
-                
                 
                 
                 `)
@@ -238,8 +266,14 @@ $(".images").click(function(){
         console.error(error)
     })
     
+        }
+    }
 
     
+    
+
+ //fin del else   
+}
 
 });
 
@@ -396,4 +430,5 @@ function changeName(){
 
     }
 }
+
 

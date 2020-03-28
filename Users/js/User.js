@@ -17,11 +17,28 @@ const firebaseConfig = {
 
 
 firebase.initializeApp(firebaseConfig);
+database= firebase.database();
 db=firebase.firestore()
 var storage = firebase.storage();
+
 // Actualizar Nombre de usuario
 
 //Variables con la info del usuario
+
+// borrar datoss
+
+function BuscarParaBorrar(){
+    
+  
+            var ref=database.ref('zaboo_bb');
+            ref.orderByChild("ID").equalTo('zaboo122').limitToLast(1).on("child_added", function(snapshot) {
+                console.log(snapshot.key);
+                ref.child(snapshot.key).remove()
+            });
+
+}
+// borrar
+
 
 function getUserData(){
     return new Promise((resolve,reject)=>{
@@ -220,11 +237,14 @@ $(".images").click(function(){
       
             var imagesReference = storage.ref(folderPath)
             var storageRef = firebase.storage().ref();
-            imagesReference.listAll()
+            imagesReference.list({maxResults:10})
             .then(function(image_item){
             image_item.items.forEach(function(item){
             var pathReference = storageRef.child(item.fullPath)  
-            console.log(item.fullPath)
+            //console.log(item.fullPath)
+            var title_image= item.fullPath.substring(9,19);
+            title_image=convertDate(title_image)
+            
             //in
             storageRef.child(item.fullPath).getDownloadURL().then(function(url) {
                 // `url` is the download URL for 'images/stars.jpg'
@@ -243,17 +263,13 @@ $(".images").click(function(){
                 // Or inserted into an <img> element:
                 $(".user-items").append(`
                 
-                <div class="col-sm-12  col-lg-3 card shadow ml-3 mr-3 mt-3 mb-3 id="${pathReference}" style="width: 25rem; background:linear-gradient(15deg,#EFEDEF 0%, #FFFFFF 100%);">
-                <div class="card-image mt-3 mb-0" style="width: 15rem;">
-                    <img class="card-img-top mb-0" src="${url}" alt="Card image cap">
-                </div>
-                <div class="card-body" >
-                    <h5 class="card-title text-capitalize" style="text-align: center; "> Foto </h5>
-                    <hr class="style3 mt-0 mb-0">
-                    <br>
-                    <p class="card-text text-left  text-muted"><i class="material-icons icon" style="color: #DB5B14;">place</i> <small> LOCATION : </small> ${dispositivos_legibles[index]}</p>
-                </div>
+
                 
+                <div class="card-body col-sm-12  col-lg-3 card shadow ml-3 mr-3 mt-3 mb-3" id="${pathReference}">
+                <h5 class="card-title font-weight-light">${title_image}</h5>
+                <img class="card-img-top" src="${url}" alt="Card image cap">
+                <p class="card-text font-italic text-muted"><i class="material-icons icon" style="color: #DB5B14;">place</i>Tomada por Zaboo Polly ${dispositivos_legibles[index]}.</p>
+              </div>
                 
                 `)
               }).catch(function(error) {
@@ -347,9 +363,28 @@ function zaboo_products_template(dispositivos,dispositivos_legibles,chat_id){
 // cuando se presione un producto en especifico
 function product_click(clicked_id){
     console.log(clicked_id)
+    // Para poner el titulo legible se busca en el vector de dispositivos legibles
+    const index = dispositivos.findIndex(device => device === clicked_id);
     $('.modal-producto-title').empty()
-    $('.modal-producto-title').append(clicked_id)
+    $('.modal-producto-title').append(dispositivos_legibles[index])
     $('#modal-producto').modal();
+    $('.modal-body-producto').empty()
+    // agregar el ultimo dato enviado por este Polly 
+    if(clicked_id.substring(0,2)==='za') {
+            console.log('click a un polly')
+            var ref=database.ref('zaboo_bb');
+            ref.orderByChild("ID").equalTo(clicked_id).limitToLast(1).on("child_added", function(snapshot) {
+                console.log(snapshot.val());
+                $('.modal-body-producto').empty()
+                $('.modal-body-producto').append( ` 
+                <p class="font-weight-bold">Ultimo dato enviado:  ${convertDate(snapshot.val().time)}.</p>
+                <p class="font-weight-bold">Dispositivos_escaneados: ${snapshot.val().devices}.</p>
+                <p class="font-weight-bold">Potencia de los dispositivos: ${snapshot.val().rssi}.</p>
+                
+                ` )
+                
+            });
+    }
 
 }
 
@@ -432,3 +467,35 @@ function changeName(){
 }
 
 
+function convertDate(timestamp){
+
+    // Months array
+    var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+   
+    // Convert timestamp to milliseconds
+    var date = new Date(timestamp*1000);
+   
+    // Year
+    var year = date.getFullYear();
+   
+    // Month
+    var month = months_arr[date.getMonth()];
+   
+    // Day
+    var day = date.getDate();
+   
+    // Hours
+    var hours = date.getHours();
+   
+    // Minutes
+    var minutes = "0" + date.getMinutes();
+   
+    // Seconds
+    var seconds = "0" + date.getSeconds();
+   
+    // Display date time in MM-dd-yyyy h:m:s format
+    var convdataTime = month+'-'+day+'-'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    
+    return convdataTime
+    
+   }

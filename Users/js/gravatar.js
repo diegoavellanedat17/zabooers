@@ -33,4 +33,13 @@ function getUserEmail(){
     console.log(error)
   })
 
+  window.addEventListener('error', function(e) {
+
+    
+    console.log('No tiene gravatar')
+    var avatarImage='<img src="https://api.adorable.io/avatars/187/amis@adorable.io.png" />'
+    $(".image-avatar").empty()
+    $(".image-avatar").append(avatarImage)
+
+}, true);
 

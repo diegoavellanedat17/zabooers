@@ -35,11 +35,14 @@ function getUserEmail(){
 
   window.addEventListener('error', function(e) {
 
-    
+    console.log(e.target.currentSrc)
+    if(e.target.currentSrc==="https://www.gravatar.com/avatar/150eaf121293fc625224dabcdcab3dc6.jpg?s=100&d=404"){
     console.log('No tiene gravatar')
+      
     var avatarImage='<img src="https://api.adorable.io/avatars/187/amis@adorable.io.png" />'
     $(".image-avatar").empty()
     $(".image-avatar").append(avatarImage)
+  }
 
 }, true);
 

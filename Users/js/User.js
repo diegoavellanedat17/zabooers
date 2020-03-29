@@ -31,14 +31,14 @@ function BuscarParaBorrar(){
     
   
             var ref=database.ref('zaboo_bb');
-            ref.orderByChild("ID").equalTo('zaboo122').limitToLast(1).on("child_added", function(snapshot) {
+            ref.orderByChild("ID").equalTo('zaboo122').limitToLast(50).on("child_added", function(snapshot) {
                 console.log(snapshot.key);
                 ref.child(snapshot.key).remove()
             });
 
 }
 // borrar
-
+//BuscarParaBorrar();
 
 function getUserData(){
     return new Promise((resolve,reject)=>{
@@ -206,7 +206,107 @@ $(".settings").click(function(){
 
 $(".assistance").click(function(){
     console.log("asistance")
+});
 
+$(".stadistics").click(function(){
+
+    console.log("stadistics")
+
+    var len = dispositivos.length;
+    if(len === 0 ){
+        $(".user-items").empty()
+        $(".user-items").append(
+        `<div class="alert alert-warning mt-5 col-12 mr-3 ml-3" role="alert">
+        <h4 class="alert-heading">OH!</h4>
+        You don´t have products asosiate with your chat account yet, please verify your chat is working or buy our products in the website www.zaboo.co
+        </div>`)
+   
+    }
+
+    else{
+        
+        $(".user-items").empty()
+       
+    for (var i = 0; i < len; i++){
+    if(dispositivos[i].substring(0,2)==='za'){
+
+        $(".user-items").append( `<canvas class="mt-5 col-12" id="${dispositivos[i]}chart" width="200" height="100"></canvas>`)
+
+        console.log(dispositivos[i])
+        var time_data=[]
+        var devices_data=[]
+        var id_plot=""
+        var ref=database.ref('zaboo_bb');
+        ref.orderByChild("ID").equalTo(dispositivos[i]).limitToLast(10).once('value').then(function(snapshot) {
+            var time_data=[]
+            var devices_data=[]
+            snapshot.forEach((child) => {
+
+                console.log(child.val());       //  gives value of key
+                time_data.push(convertDate(child.val().time))
+                devices_data.push(child.val().devices.length)
+                id_plot=child.val().ID
+             });
+             // encontrar la locación
+            console.log(id_plot)
+            const index = dispositivos.findIndex(device => device === id_plot);
+            var ctx = document.getElementById(`${id_plot}chart`).getContext('2d');
+            var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+            labels: time_data,
+            datasets: [{
+                label: 'Number of devices',
+                backgroundColor: 'rgb(83, 52, 172)',
+                borderColor: 'rgb(2, 130, 149)',
+                data: devices_data
+            }]
+                },
+    
+        // Configuration options go here
+        options: {
+            title: {
+                display: true,
+                text: `${dispositivos_legibles[index]} `
+            },
+            scales:{
+                yAxes:[{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Devices'
+                      },
+                      ticks: {
+                        beginAtZero: true
+                
+                    }
+                      
+                    
+    
+                }],
+                xAxes:[{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                      },
+                    
+                    ticks: {
+                        autoSkipPadding:30,
+                
+                    }
+                }]
+            }
+        }
+        });
+
+          });
+
+
+        }   
+
+    }
+}
 });
 
 $(".images").click(function(){

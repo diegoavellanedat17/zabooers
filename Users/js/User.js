@@ -456,6 +456,28 @@ function zaboo_products_template(dispositivos,dispositivos_legibles,chat_id){
         `)
 
         }
+
+        else if (dispositivos[i].substring(0,2)==='Li'){
+
+            $(".user-items").append(`                            
+            <div class="col-sm-12  col-lg-3 card shadow ml-3 mr-3 mt-3 mb-3 id="${dispositivos[i]}" style="width: 20rem; background:linear-gradient(15deg,#EFEDEF 0%, #FFFFFF 100%);">
+                <div class="d-flex flex-row-reverse info-card"><i class="material-icons icon" style="color: gray;" data-toggle="tooltip" data-placement="top" title="Zaboo Light, device for connected to ON/OFF">info</i></div>
+                <div class="card-image mt-3 mb-0" style="width: 7rem;">
+                    <img class="card-img-top mb-0" src="./images/luz_amarilla.svg" alt="Card image cap">
+                </div>
+                <div class="card-body" >
+                    <h5 class="card-title text-capitalize" style="text-align: center; "> ${dispositivos_legibles[i]} </h5>
+                    <hr class="style3 mt-0 mb-0">
+                    <br>
+                    <p class="card-text text-left  text-muted"><i class="material-icons icon" style="color: #DB5B14;">group_work</i> <small> TIPO : </small> Zaboo Light</p>
+                    <p class="card-text text-left  text-muted text-uppercase"> <i class="material-icons icon" style="color: gray;">lens</i><small> DEVICE_ID : </small > ${dispositivos[i]}</p>
+                    <div class="d-flex flex-row-reverse"><a href="#" class="btn btn-outline-success " onClick="product_click(this.id)" id="${dispositivos[i]}" >Go</a></div>
+                </div>
+        
+            </div>
+        `)
+
+        }
        
     }
 

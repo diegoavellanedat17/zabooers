@@ -15,9 +15,11 @@
 }
 
 .avatar {
+    
     background: rgba(0, 0, 0, 0.01);
     padding: 2em 0.5em;
     text-align: center;
+    
   }
 
 .avatar img {
@@ -65,8 +67,9 @@ hr.style3 {
 }
   
   #sidebar-wrapper {
+    
     min-height: 100vh;
-    margin-left: -15rem;
+    margin-left: -19rem;
     -webkit-transition: margin .25s ease-out;
     -moz-transition: margin .25s ease-out;
     -o-transition: margin .25s ease-out;
@@ -74,15 +77,18 @@ hr.style3 {
   }
   
   #sidebar-wrapper .sidebar-heading {
+   
     padding: 0.875rem 1.25rem;
     font-size: 1.2rem;
   }
   
   #sidebar-wrapper .list-group {
+    
     width: 15rem;
   }
   
   #page-content-wrapper {
+    
     min-width: 100vw;
   }
   
